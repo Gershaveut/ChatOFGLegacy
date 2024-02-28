@@ -3,11 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33717.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientChatOFG", "ClientChatOFG.csproj", "{AA5E378E-DFB4-4305-802B-1C9B83C40130}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientChatOFG", "ClientChatOFG.csproj", "{AA5E378E-DFB4-4305-802B-1C9B83C40130}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerChatOFG", "..\ServerChatOFG\ServerChatOFG.csproj", "{2138BC9C-D022-4C31-A96D-46485B41AE8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerChatOFG", "..\ServerChatOFG\ServerChatOFG.csproj", "{2138BC9C-D022-4C31-A96D-46485B41AE8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestChatOFG", "..\TestChatOFG\TestChatOFG.csproj", "{851C1A18-D17F-47C7-8A05-FF0F791D828B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestChatOFG", "..\TestChatOFG\TestChatOFG.csproj", "{851C1A18-D17F-47C7-8A05-FF0F791D828B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{84B39D87-0B72-4C85-90C3-630D6EBD9ACB}"
+	ProjectSection(SolutionItems) = preProject
+		..\OFGmCoreCS.dll = ..\OFGmCoreCS.dll
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

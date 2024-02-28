@@ -8,4 +8,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="OFGmCoreCS">
+      <HintPath>..\OFGmCoreCS.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
