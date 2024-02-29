@@ -31,12 +31,17 @@
             chatRichTextBox = new RichTextBox();
             messageTextBox = new TextBox();
             sendButton = new Button();
+            menuStrip1 = new MenuStrip();
+            menuToolStripMenuItem = new ToolStripMenuItem();
+            logToolStripMenuItem = new ToolStripMenuItem();
+            reconnectToolStripMenuItem = new ToolStripMenuItem();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // chatRichTextBox
             // 
             chatRichTextBox.BackColor = SystemColors.Window;
-            chatRichTextBox.Location = new Point(12, 12);
+            chatRichTextBox.Location = new Point(12, 27);
             chatRichTextBox.Name = "chatRichTextBox";
             chatRichTextBox.ReadOnly = true;
             chatRichTextBox.Size = new Size(776, 397);
@@ -45,7 +50,7 @@
             // 
             // messageTextBox
             // 
-            messageTextBox.Location = new Point(12, 415);
+            messageTextBox.Location = new Point(12, 430);
             messageTextBox.Name = "messageTextBox";
             messageTextBox.Size = new Size(695, 23);
             messageTextBox.TabIndex = 1;
@@ -53,7 +58,7 @@
             // 
             // sendButton
             // 
-            sendButton.Location = new Point(713, 415);
+            sendButton.Location = new Point(713, 430);
             sendButton.Name = "sendButton";
             sendButton.Size = new Size(75, 23);
             sendButton.TabIndex = 2;
@@ -61,17 +66,54 @@
             sendButton.UseVisualStyleBackColor = true;
             sendButton.Click += sendButton_Click;
             // 
+            // menuStrip1
+            // 
+            menuStrip1.BackColor = SystemColors.Window;
+            menuStrip1.Items.AddRange(new ToolStripItem[] { menuToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(799, 24);
+            menuStrip1.TabIndex = 3;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // menuToolStripMenuItem
+            // 
+            menuToolStripMenuItem.BackColor = SystemColors.Window;
+            menuToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { logToolStripMenuItem, reconnectToolStripMenuItem });
+            menuToolStripMenuItem.Name = "menuToolStripMenuItem";
+            menuToolStripMenuItem.Size = new Size(53, 20);
+            menuToolStripMenuItem.Text = "Меню";
+            // 
+            // logToolStripMenuItem
+            // 
+            logToolStripMenuItem.Name = "logToolStripMenuItem";
+            logToolStripMenuItem.Size = new Size(182, 22);
+            logToolStripMenuItem.Text = "Журнал";
+            logToolStripMenuItem.Click += logToolStripMenuItem_Click;
+            // 
+            // reconnectToolStripMenuItem
+            // 
+            reconnectToolStripMenuItem.Name = "reconnectToolStripMenuItem";
+            reconnectToolStripMenuItem.Size = new Size(182, 22);
+            reconnectToolStripMenuItem.Text = "Переподключиться";
+            reconnectToolStripMenuItem.Click += reconnectToolStripMenuItem_Click;
+            // 
             // ChatOFGForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(799, 461);
             Controls.Add(sendButton);
             Controls.Add(messageTextBox);
             Controls.Add(chatRichTextBox);
+            Controls.Add(menuStrip1);
+            MainMenuStrip = menuStrip1;
             Name = "ChatOFGForm";
+            Tag = "ChatOFG";
             Text = "ChatOFG";
             Load += ChatOFGForm_Load;
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -81,5 +123,9 @@
         private RichTextBox chatRichTextBox;
         private TextBox messageTextBox;
         private Button sendButton;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem menuToolStripMenuItem;
+        private ToolStripMenuItem logToolStripMenuItem;
+        private ToolStripMenuItem reconnectToolStripMenuItem;
     }
 }

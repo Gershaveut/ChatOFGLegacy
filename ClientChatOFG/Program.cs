@@ -1,3 +1,5 @@
+using OFGmCoreCS.Util;
+
 namespace ClientChatOFG
 {
     internal static class Program
@@ -5,11 +7,20 @@ namespace ClientChatOFG
         [STAThread]
         static void Main()
         {
-            ApplicationConfiguration.Initialize();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
 
             ChatOFGForm chatOFGForm = new ChatOFGForm();
 
-            Application.Run(new ChatOFGForm());
+            try
+            {
+                Application.Run(new ChatOFGForm());
+            }
+            catch (Exception ex)
+            {
+                new CrashReport(CrashReporter.CreateReport(ex)).ShowDialog();
+            }
 
             chatOFGForm.chatOFG.logger.fileLogger.SaveFile();
         }

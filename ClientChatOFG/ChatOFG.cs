@@ -16,8 +16,10 @@ namespace ClientChatOFG
         public StreamWriter? Writer { get; }
 
         public delegate void ReceiveMessageHandler(string message);
+        public delegate void ConnectionLostHandler();
 
         public event ReceiveMessageHandler? ReceiveMessage;
+        public event ConnectionLostHandler? ConnectionLost;
 
         public ChatOFG(Logger logger)
         {
@@ -80,7 +82,11 @@ namespace ClientChatOFG
                         if (string.IsNullOrEmpty(message))
                             continue;
 
-                        logger.Write(message, LoggerLevel.Info);
+                        if (message.Split(':')[0] == "KICK")
+                            logger.Write("Вы были исключены по причине: " + message.Split(':')[1], LoggerLevel.Warn);
+                        else
+                            logger.Write(message, LoggerLevel.Info);
+
                         ReceiveMessage?.Invoke(message);
                     }
                     else
@@ -88,6 +94,11 @@ namespace ClientChatOFG
                         logger.Write("Нет подключения", LoggerLevel.Error);
                         break;
                     }
+                }
+                catch (IOException ex)
+                {
+                    ConnectionLost?.Invoke();
+                    logger.Write(ex.Message, LoggerLevel.Warn);
                 }
                 catch (Exception ex)
                 {

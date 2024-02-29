@@ -1,7 +1,10 @@
-﻿using OFGmCoreCS.LoggerSimple;
+﻿using OFGmCoreCS.ConsoleSimple;
+using OFGmCoreCS.LoggerSimple;
 using OFGmCoreCS.Util;
+using ServerChatOFG.Command;
 using System.IO;
 using System.Net.Sockets;
+using System.Xml.Linq;
 
 namespace ServerChatOFG
 {
@@ -22,6 +25,7 @@ namespace ServerChatOFG
             {
                 tcpListener.Start();
                 logger.Write("Сервер запущен", LoggerLevel.Info);
+                _ = Task.Run(CommandHandlerAsync);
 
                 while (true)
                 {
@@ -38,7 +42,7 @@ namespace ServerChatOFG
                     }
                     else
                     {
-                        await client.SendMessageAsync($"Пользователь с именем {client.name} уже вошёл", LoggerLevel.Error);
+                        await client.SendMessageAsync($"KICK:Пользователь с именем {client.name} уже вошёл", LoggerLevel.Error);
                         client.Close();
                     }
                 }
@@ -46,6 +50,22 @@ namespace ServerChatOFG
             catch (Exception ex)
             {
                 logger.Write(ex.Message, LoggerLevel.Error);
+            }
+        }
+
+        public Task CommandHandlerAsync()
+        {
+            CommandHandler commandHandler = new CommandHandler();
+
+            commandHandler.Register(new CommandKick(this));
+            commandHandler.Register(new CommandSend(this));
+
+            while (true)
+            {
+                var feedback = commandHandler.ExecuteCommand(System.Console.ReadLine());
+
+                if (feedback.message != "")
+                    logger.Write(feedback.message, feedback.loggerLevel);
             }
         }
 
@@ -69,6 +89,20 @@ namespace ServerChatOFG
                 clients.Remove(client);
                 client.Close();
             }
+        }
+
+        public async Task SendMessageAsync(string name, string message)
+        {
+            Client? client = clients.FirstOrDefault(c => c.name == name);
+
+            if (client != null)
+                await client.SendMessageAsync(message);
+        }
+
+        public async Task KickClientAsync(string name, string cause)
+        {
+            await SendMessageAsync(name, "KICK:" + cause);
+            RemoveConnection(name);
         }
 
         public void Stop()

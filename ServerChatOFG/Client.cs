@@ -59,6 +59,10 @@ namespace ServerChatOFG
         {
             server.logger.Write(message, loggerLevel);
 
+            await SendMessageAsync(message);
+        }
+        public async Task SendMessageAsync(string message)
+        {
             await writer.WriteLineAsync(message);
             await writer.FlushAsync();
         }
