@@ -28,6 +28,7 @@ namespace ServerChatOFG
             try
             {
                 await server.BroadcastMessageAsync($"{name} вошел в чат");
+                await server.BroadcastMessageAsync(name, "USER:");
 
                 while (true)
                 {
@@ -44,6 +45,7 @@ namespace ServerChatOFG
                     {
                         server.RemoveConnection(name);
                         await server.BroadcastMessageAsync($"{name} покинул чат");
+                        await server.BroadcastMessageAsync(name, "LUSER:");
                         break;
                     }
                 }

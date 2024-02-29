@@ -28,10 +28,24 @@ namespace ClientChatOFG
             {
                 BeginInvoke((MethodInvoker)delegate
                 {
-                    if (message.Split(':')[0] == "KICK")
-                        Disconnect("Вы были исключены по причине: " + message.Split(':')[1]);
-                    else
-                        chatRichTextBox.AppendText(Environment.NewLine + message);
+                    string argument = message.Split(':')[0];
+                    message = message.Split(':')[1];
+
+                    switch (argument)
+                    {
+                        case "MESSAGE":
+                            chatRichTextBox.AppendText(Environment.NewLine + message);
+                            break;
+                        case "KICK":
+                            Disconnect("Вы были исключены по причине: " + message);
+                            break;
+                        case "USER":
+                            usersListBox.Items.Add(message);
+                            break;
+                        case "LUSER":
+                            usersListBox.Items.Remove(message);
+                            break;
+                    }
                 });
                 return;
             }
@@ -60,6 +74,7 @@ namespace ClientChatOFG
         {
             chatRichTextBox.Clear();
             messageTextBox.Clear();
+            usersListBox.Items.Clear();
         }
 
         public DialogResult ShowMessageBoxWithLog(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, LoggerLevel logLevel)

@@ -69,15 +69,20 @@ namespace ServerChatOFG
             }
         }
 
-        public async Task BroadcastMessageAsync(string message)
+        public async Task BroadcastMessageAsync(string message, string argument)
         {
             logger.Write(message, LoggerLevel.Info);
 
             foreach (var client in clients)
             {
-                await client.writer.WriteLineAsync(message);
+                await client.writer.WriteLineAsync(argument + message);
                 await client.writer.FlushAsync();
             }
+        }
+
+        public async Task BroadcastMessageAsync(string message)
+        {
+            await BroadcastMessageAsync(message, "MESSAGE:");
         }
 
         public void RemoveConnection(string name)
@@ -96,7 +101,7 @@ namespace ServerChatOFG
             Client? client = clients.FirstOrDefault(c => c.name == name);
 
             if (client != null)
-                await client.SendMessageAsync(message);
+                await client.SendMessageAsync("MESSAGE:" + message);
         }
 
         public async Task KickClientAsync(string name, string cause)

@@ -35,6 +35,8 @@
             menuToolStripMenuItem = new ToolStripMenuItem();
             logToolStripMenuItem = new ToolStripMenuItem();
             reconnectToolStripMenuItem = new ToolStripMenuItem();
+            usersListBox = new ListBox();
+            label1 = new Label();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -44,7 +46,7 @@
             chatRichTextBox.Location = new Point(12, 27);
             chatRichTextBox.Name = "chatRichTextBox";
             chatRichTextBox.ReadOnly = true;
-            chatRichTextBox.Size = new Size(776, 397);
+            chatRichTextBox.Size = new Size(695, 397);
             chatRichTextBox.TabIndex = 0;
             chatRichTextBox.Text = "Вход в чат выполнен";
             // 
@@ -98,11 +100,31 @@
             reconnectToolStripMenuItem.Text = "Переподключиться";
             reconnectToolStripMenuItem.Click += reconnectToolStripMenuItem_Click;
             // 
+            // usersListBox
+            // 
+            usersListBox.FormattingEnabled = true;
+            usersListBox.ItemHeight = 15;
+            usersListBox.Location = new Point(713, 45);
+            usersListBox.Name = "usersListBox";
+            usersListBox.Size = new Size(75, 379);
+            usersListBox.TabIndex = 4;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(713, 27);
+            label1.Name = "label1";
+            label1.Size = new Size(85, 15);
+            label1.TabIndex = 5;
+            label1.Text = "Пользователи";
+            // 
             // ChatOFGForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(799, 461);
+            Controls.Add(label1);
+            Controls.Add(usersListBox);
             Controls.Add(sendButton);
             Controls.Add(messageTextBox);
             Controls.Add(chatRichTextBox);
@@ -127,5 +149,7 @@
         private ToolStripMenuItem menuToolStripMenuItem;
         private ToolStripMenuItem logToolStripMenuItem;
         private ToolStripMenuItem reconnectToolStripMenuItem;
+        private ListBox usersListBox;
+        private Label label1;
     }
 }
