@@ -1,6 +1,6 @@
 ﻿namespace ClientChatOFG
 {
-    partial class LoginForm
+    partial class Login
     {
         /// <summary>
         /// Required designer variable.
@@ -53,6 +53,7 @@
             IPTextBox.Name = "IPTextBox";
             IPTextBox.Size = new Size(100, 23);
             IPTextBox.TabIndex = 1;
+            IPTextBox.Text = "127.0.0.1";
             // 
             // portLabel
             // 
@@ -70,6 +71,7 @@
             portTextBox.Name = "portTextBox";
             portTextBox.Size = new Size(100, 23);
             portTextBox.TabIndex = 3;
+            portTextBox.Text = "7500";
             // 
             // loginButton
             // 
@@ -99,7 +101,7 @@
             nameTextBox.Size = new Size(100, 23);
             nameTextBox.TabIndex = 6;
             // 
-            // LoginForm
+            // Login
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -112,7 +114,7 @@
             Controls.Add(IPTextBox);
             Controls.Add(IPLabel);
             MinimumSize = new Size(200, 225);
-            Name = "LoginForm";
+            Name = "Login";
             Text = "Вход";
             FormClosing += LoginForm_FormClosing;
             ResumeLayout(false);

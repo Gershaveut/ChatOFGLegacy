@@ -27,8 +27,7 @@ namespace ServerChatOFG
         {
             try
             {
-                await server.BroadcastMessageAsync($"{name} вошел в чат");
-                await server.BroadcastMessageAsync(name, "USER:");
+                await server.BroadcastMessageAsync($"{name} вошел в чат", MessageType.Join);
 
                 while (true)
                 {
@@ -43,30 +42,35 @@ namespace ServerChatOFG
                     }
                     catch
                     {
-                        server.RemoveConnection(name);
-                        await server.BroadcastMessageAsync($"{name} покинул чат");
-                        await server.BroadcastMessageAsync(name, "LUSER:");
+                        Close();
+                        await server.BroadcastMessageAsync($"{name} покинул чат", MessageType.Leave);
                         break;
                     }
                 }
             }
             catch (Exception e)
             {
-                server.RemoveConnection(name);
+                Close();
                 server.logger.Write(e.Message, LoggerLevel.Error);
             }
         }
 
-        public async Task SendMessageAsync(string message, LoggerLevel loggerLevel)
+        public async Task SendMessageAsync(string message, LoggerLevel loggerLevel, MessageType messageType = MessageType.Message)
         {
             server.logger.Write(message, loggerLevel);
 
-            await SendMessageAsync(message);
+            await SendMessageAsync(message, messageType);
         }
-        public async Task SendMessageAsync(string message)
+        public async Task SendMessageAsync(string message, MessageType messageType = MessageType.Message)
         {
-            await writer.WriteLineAsync(message);
+            await writer.WriteLineAsync($"{messageType}:{message}");
             await writer.FlushAsync();
+        }
+
+        public async Task KickClientAsync(string cause)
+        {
+            await SendMessageAsync(cause, LoggerLevel.Info, MessageType.Kick);
+            Close();
         }
 
         public async Task<string?> ReceiveMessageAsync()
@@ -81,9 +85,12 @@ namespace ServerChatOFG
 
         public void Close()
         {
-            writer.Close();
-            reader.Close();
-            client.Close();
+            if (!server.TryRemoveConnection(name))
+            {
+                writer.Close();
+                reader.Close();
+                client.Close();
+            }
         }
     }
 }

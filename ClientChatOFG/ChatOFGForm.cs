@@ -22,28 +22,25 @@ namespace ClientChatOFG
             Send();
         }
 
-        private void ReceiveMessage(string message)
+        private void ReceiveMessage(Message message)
         {
             if (InvokeRequired)
             {
                 BeginInvoke((MethodInvoker)delegate
                 {
-                    string argument = message.Split(':')[0];
-                    message = message.Split(':')[1];
-
-                    switch (argument)
+                    switch (message.messageType)
                     {
-                        case "MESSAGE":
+                        case MessageType.Message:
                             chatRichTextBox.AppendText(Environment.NewLine + message);
                             break;
-                        case "KICK":
+                        case MessageType.Kick:
                             Disconnect("Вы были исключены по причине: " + message);
                             break;
-                        case "USER":
-                            usersListBox.Items.Add(message);
+                        case MessageType.Join:
+                            usersListBox.Items.Add(message.text.Split(' ')[0]);
                             break;
-                        case "LUSER":
-                            usersListBox.Items.Remove(message);
+                        case MessageType.Leave:
+                            usersListBox.Items.Remove(message.text.Split(' ')[0]);
                             break;
                     }
                 });
@@ -67,7 +64,7 @@ namespace ClientChatOFG
         {
             chatOFG.Disconnect();
             ShowMessageBoxWithLog(cause, "Соединение потеряно", MessageBoxButtons.OK, MessageBoxIcon.Warning, LoggerLevel.Warn);
-            new LoginForm(this).ShowDialog();
+            new Login(this).ShowDialog();
         }
 
         public void Connect()
@@ -90,7 +87,7 @@ namespace ClientChatOFG
 
         private void ChatOFGForm_Load(object sender, EventArgs e)
         {
-            new LoginForm(this).ShowDialog();
+            new Login(this).ShowDialog();
         }
 
         private void logToolStripMenuItem_Click(object sender, EventArgs e)
@@ -100,7 +97,7 @@ namespace ClientChatOFG
 
         private void reconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new LoginForm(this).ShowDialog();
+            new Login(this).ShowDialog();
         }
     }
 }

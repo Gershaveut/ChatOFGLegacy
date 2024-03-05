@@ -11,7 +11,7 @@ namespace ClientChatOFG
             Application.SetCompatibleTextRenderingDefault(false);
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
 
-            ChatOFGForm chatOFGForm = new ChatOFGForm();
+            ChatOFGForm chatOFGForm = new();
 
             try
             {

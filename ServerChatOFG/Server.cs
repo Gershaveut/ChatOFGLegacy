@@ -2,9 +2,7 @@
 using OFGmCoreCS.LoggerSimple;
 using OFGmCoreCS.Util;
 using ServerChatOFG.Command;
-using System.IO;
 using System.Net.Sockets;
-using System.Xml.Linq;
 
 namespace ServerChatOFG
 {
@@ -38,12 +36,15 @@ namespace ServerChatOFG
                     if (!clients.Any((c) => c.name == name))
                     {
                         clients.Add(client);
+
+                        foreach (Client join in clients)
+                            await client.SendMessageAsync(join.name, MessageType.Join);
+
                         _ = Task.Run(client.ProcessAsync);
                     }
                     else
                     {
-                        await client.SendMessageAsync($"KICK:Пользователь с именем {client.name} уже вошёл", LoggerLevel.Error);
-                        client.Close();
+                        await client.KickClientAsync($"Пользователь с именем {client.name} уже вошёл");
                     }
                 }
             }
@@ -69,23 +70,15 @@ namespace ServerChatOFG
             }
         }
 
-        public async Task BroadcastMessageAsync(string message, string argument)
+        public async Task BroadcastMessageAsync(string message, MessageType messageType = MessageType.Message)
         {
             logger.Write(message, LoggerLevel.Info);
 
             foreach (var client in clients)
-            {
-                await client.writer.WriteLineAsync(argument + message);
-                await client.writer.FlushAsync();
-            }
+                await client.SendMessageAsync(message, messageType);
         }
 
-        public async Task BroadcastMessageAsync(string message)
-        {
-            await BroadcastMessageAsync(message, "MESSAGE:");
-        }
-
-        public void RemoveConnection(string name)
+        public bool TryRemoveConnection(string name)
         {
             Client? client = clients.FirstOrDefault(c => c.name == name);
 
@@ -93,21 +86,31 @@ namespace ServerChatOFG
             {
                 clients.Remove(client);
                 client.Close();
+                return true;
             }
+
+            return false;
         }
 
-        public async Task SendMessageAsync(string name, string message)
+        public void RemoveConnection(string name)
+        {
+            TryRemoveConnection(name);
+        }
+
+        public async Task SendMessageAsync(string name, string message, MessageType messageType = MessageType.Message)
         {
             Client? client = clients.FirstOrDefault(c => c.name == name);
-
+            
             if (client != null)
-                await client.SendMessageAsync("MESSAGE:" + message);
+                await client.SendMessageAsync(message, messageType);
         }
 
         public async Task KickClientAsync(string name, string cause)
         {
-            await SendMessageAsync(name, "KICK:" + cause);
-            RemoveConnection(name);
+            Client? client = clients.FirstOrDefault(c => c.name == name);
+
+            if (client != null)
+                await client.KickClientAsync(cause);
         }
 
         public void Stop()

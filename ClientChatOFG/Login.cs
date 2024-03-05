@@ -3,11 +3,11 @@ using System.Net.Sockets;
 
 namespace ClientChatOFG
 {
-    public partial class LoginForm : Form
+    public partial class Login : Form
     {
         public ChatOFGForm сhatOFGForm;
 
-        public LoginForm(ChatOFGForm сhatOFGForm)
+        public Login(ChatOFGForm сhatOFGForm)
         {
             InitializeComponent();
 
