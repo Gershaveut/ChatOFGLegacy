@@ -37,6 +37,8 @@
             reconnectToolStripMenuItem = new ToolStripMenuItem();
             usersListBox = new ListBox();
             label1 = new Label();
+            debugToolStripMenuItem = new ToolStripMenuItem();
+            sendCustomToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -71,7 +73,7 @@
             // menuStrip1
             // 
             menuStrip1.BackColor = SystemColors.Window;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { menuToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { menuToolStripMenuItem, debugToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(799, 24);
@@ -118,6 +120,20 @@
             label1.TabIndex = 5;
             label1.Text = "Пользователи";
             // 
+            // debugToolStripMenuItem
+            // 
+            debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { sendCustomToolStripMenuItem });
+            debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            debugToolStripMenuItem.Size = new Size(51, 20);
+            debugToolStripMenuItem.Text = "Дебаг";
+            // 
+            // sendCustomToolStripMenuItem
+            // 
+            sendCustomToolStripMenuItem.Name = "sendCustomToolStripMenuItem";
+            sendCustomToolStripMenuItem.Size = new Size(227, 22);
+            sendCustomToolStripMenuItem.Text = "Отправить свое сообщение";
+            sendCustomToolStripMenuItem.Click += sendCustomToolStripMenuItem_Click;
+            // 
             // ChatOFGForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -151,5 +167,7 @@
         private ToolStripMenuItem reconnectToolStripMenuItem;
         private ListBox usersListBox;
         private Label label1;
+        private ToolStripMenuItem debugToolStripMenuItem;
+        private ToolStripMenuItem sendCustomToolStripMenuItem;
     }
 }

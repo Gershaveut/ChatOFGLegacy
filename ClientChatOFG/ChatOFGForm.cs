@@ -1,5 +1,7 @@
+using ChatOFGAPI;
 using OFGmCoreCS.LoggerSimple;
 using OFGmCoreCS.Util;
+using Message = ChatOFGAPI.Message;
 
 namespace ClientChatOFG
 {
@@ -56,7 +58,7 @@ namespace ClientChatOFG
 
         private void Send()
         {
-            chatOFG.SendMessage(messageTextBox.Text);
+            chatOFG.SendMessage("message:" + messageTextBox.Text);
             messageTextBox.Text = "";
         }
 
@@ -98,6 +100,12 @@ namespace ClientChatOFG
         private void reconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new Login(this).ShowDialog();
+        }
+
+        private void sendCustomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            chatOFG.SendMessage(messageTextBox.Text);
+            messageTextBox.Text = "";
         }
     }
 }

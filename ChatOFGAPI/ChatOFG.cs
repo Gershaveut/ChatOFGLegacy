@@ -1,26 +1,30 @@
 ﻿using OFGmCoreCS.LoggerSimple;
+using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace ClientChatOFG
+namespace ChatOFGAPI
 {
     public class ChatOFG
     {
-        public TcpClient? client;
+        public TcpClient client;
         public Logger logger;
 
-        protected StreamReader? reader;
-        protected StreamWriter? writer;
-        protected CancellationTokenSource? receiveMessageToken;
+        protected StreamReader reader;
+        protected StreamWriter writer;
+        protected CancellationTokenSource receiveMessageToken;
 
-        public StreamReader? Reader { get; }
-        public StreamWriter? Writer { get; }
+        public StreamReader Reader { get; }
+        public StreamWriter Writer { get; }
 
         public delegate void ReceiveMessageHandler(Message message);
         public delegate void ConnectionLostHandler();
 
-        public event ReceiveMessageHandler? ReceiveMessage;
-        public event ConnectionLostHandler? ConnectionLost;
+        public event ReceiveMessageHandler ReceiveMessage;
+        public event ConnectionLostHandler ConnectionLost;
 
         public ChatOFG(Logger logger)
         {
@@ -31,7 +35,7 @@ namespace ClientChatOFG
         {
             Disconnect();
 
-            receiveMessageToken = new();
+            receiveMessageToken = new CancellationTokenSource();
 
             client = tcpClient;
             client.Connect(remote);
@@ -70,9 +74,9 @@ namespace ClientChatOFG
             {
                 try
                 {
-                    if (reader is not null)
+                    if (reader != null)
                     {
-                        string? text = await reader.ReadLineAsync();
+                        string text = await reader.ReadLineAsync();
 
                         if (string.IsNullOrEmpty(text))
                             continue;

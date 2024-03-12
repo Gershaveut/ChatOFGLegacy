@@ -21,7 +21,7 @@ namespace ServerChatOFG
 
             server = new Server(new TcpListener(IPAddress.Parse(ip), Convert.ToInt32(port)));
 
-            ConsoleHelper.SetSignalHandler((consoleSignal) => server.logger.fileLogger.SaveFile(), true);
+            ConsoleHelper.SetSignal((consoleSignal) => server.logger.fileLogger.SaveFile(), true);
 
             Console.CancelKeyPress += (sender, e) => server.logger.fileLogger.SaveFile();
 

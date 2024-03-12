@@ -7,12 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientChatOFG", "ClientChat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerChatOFG", "..\ServerChatOFG\ServerChatOFG.csproj", "{2138BC9C-D022-4C31-A96D-46485B41AE8B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestChatOFG", "..\TestChatOFG\TestChatOFG.csproj", "{851C1A18-D17F-47C7-8A05-FF0F791D828B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{84B39D87-0B72-4C85-90C3-630D6EBD9ACB}"
 	ProjectSection(SolutionItems) = preProject
 		..\OFGmCoreCS.dll = ..\OFGmCoreCS.dll
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatOFGAPI", "..\ChatOFGAPI\ChatOFGAPI.csproj", "{E861D81E-B511-43E9-A5E1-CF6B742AE5A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,10 +28,10 @@ Global
 		{2138BC9C-D022-4C31-A96D-46485B41AE8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2138BC9C-D022-4C31-A96D-46485B41AE8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2138BC9C-D022-4C31-A96D-46485B41AE8B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{851C1A18-D17F-47C7-8A05-FF0F791D828B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{851C1A18-D17F-47C7-8A05-FF0F791D828B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{851C1A18-D17F-47C7-8A05-FF0F791D828B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{851C1A18-D17F-47C7-8A05-FF0F791D828B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E861D81E-B511-43E9-A5E1-CF6B742AE5A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E861D81E-B511-43E9-A5E1-CF6B742AE5A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E861D81E-B511-43E9-A5E1-CF6B742AE5A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E861D81E-B511-43E9-A5E1-CF6B742AE5A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

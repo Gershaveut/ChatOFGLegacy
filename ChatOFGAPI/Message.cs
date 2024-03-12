@@ -1,4 +1,6 @@
-﻿namespace ClientChatOFG
+﻿using System;
+
+namespace ChatOFGAPI
 {
     public struct Message
     {
@@ -7,7 +9,7 @@
 
         public Message(string text)
         {
-            this.text = text[(text.IndexOf(':') + 1)..];
+            this.text = text.Substring(text.IndexOf(':') + 1);
 
             Enum.TryParse(text.Split(':')[0], out messageType);
         }

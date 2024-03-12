@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ChatOFGAPI\ChatOFGAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="OFGmCoreCS">
       <HintPath>..\OFGmCoreCS.dll</HintPath>
     </Reference>

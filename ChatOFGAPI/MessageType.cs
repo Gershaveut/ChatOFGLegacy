@@ -1,4 +1,4 @@
-﻿namespace ServerChatOFG
+﻿namespace ChatOFGAPI
 {
     public enum MessageType
     {

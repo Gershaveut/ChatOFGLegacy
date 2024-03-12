@@ -1,4 +1,5 @@
-﻿using OFGmCoreCS.LoggerSimple;
+﻿using ChatOFGAPI;
+using OFGmCoreCS.LoggerSimple;
 using System.Net.Sockets;
 
 namespace ServerChatOFG
@@ -33,12 +34,22 @@ namespace ServerChatOFG
                 {
                     try
                     {
-                        string? message = await reader.ReadLineAsync();
+                        string? text = await reader.ReadLineAsync();
 
-                        if (message == null)
+                        if (text == null)
                             continue;
 
-                        await server.BroadcastMessageAsync($"{name}: {message}");
+                        Message message = text;
+
+                        if (message.messageType == MessageType.Message)
+                            await server.BroadcastMessageAsync($"{name}: {message.text}");
+                        else
+                        {
+                            if (server.admins.Contains(name))
+                                await server.BroadcastMessageAsync(message.text, message.messageType);
+                            else
+                                await SendMessageAsync("У вас недостаточно прав для использования этого");
+                        }
                     }
                     catch
                     {

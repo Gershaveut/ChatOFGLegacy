@@ -1,4 +1,5 @@
-﻿using OFGmCoreCS.ConsoleSimple;
+﻿using ChatOFGAPI;
+using OFGmCoreCS.ConsoleSimple;
 using OFGmCoreCS.LoggerSimple;
 using OFGmCoreCS.Util;
 using ServerChatOFG.Command;
@@ -11,6 +12,7 @@ namespace ServerChatOFG
         public readonly TcpListener tcpListener;
         public readonly Logger logger = new(new Logger.Properties(), new FileLogger());
         public readonly List<Client> clients = new();
+        public readonly List<string> admins = new();
 
         public Server(TcpListener tcpListener)
         {
@@ -60,6 +62,7 @@ namespace ServerChatOFG
 
             commandHandler.Register(new CommandKick(this));
             commandHandler.Register(new CommandSend(this));
+            commandHandler.Register(new CommandAdmin(this));
 
             while (true)
             {
