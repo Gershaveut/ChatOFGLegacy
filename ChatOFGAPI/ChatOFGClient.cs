@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace ChatOFGAPI
 {
-    public class ChatOFG
+    public class ChatOFGClient
     {
         public TcpClient client;
         public Logger logger;
+        public string name;
 
         protected StreamReader reader;
         protected StreamWriter writer;
@@ -26,13 +27,15 @@ namespace ChatOFGAPI
         public event ReceiveMessageHandler ReceiveMessage;
         public event ConnectionLostHandler ConnectionLost;
 
-        public ChatOFG(Logger logger)
+        public ChatOFGClient(Logger logger)
         {
             this.logger = logger;
         }
 
         public async Task Connect(TcpClient tcpClient, IPEndPoint remote, string name)
         {
+            this.name = name;
+
             Disconnect();
 
             receiveMessageToken = new CancellationTokenSource();

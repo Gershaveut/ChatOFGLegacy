@@ -5,6 +5,7 @@
         Message,
         Join,
         Leave,
-        Kick
+        Kick,
+        Error
     }
 }

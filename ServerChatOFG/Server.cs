@@ -37,10 +37,10 @@ namespace ServerChatOFG
 
                     if (!clients.Any((c) => c.name == name))
                     {
-                        clients.Add(client);
-
                         foreach (Client join in clients)
                             await client.SendMessageAsync(join.name, MessageType.Join);
+
+                        clients.Add(client);
 
                         _ = Task.Run(client.ProcessAsync);
                     }

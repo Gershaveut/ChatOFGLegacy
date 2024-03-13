@@ -14,6 +14,17 @@ namespace ChatOFGAPI
             Enum.TryParse(text.Split(':')[0], out messageType);
         }
 
+        public Message(string text, MessageType messageType)
+        {
+            this.text = text;
+            this.messageType = messageType;
+        }
+
+        public string ToFullText()
+        {
+            return messageType + ":" + text;
+        }
+
         public static implicit operator Message(string text)
         {
             return new Message(text);

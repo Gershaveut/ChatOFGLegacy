@@ -7,16 +7,16 @@ namespace ClientChatOFG
 {
     public partial class ChatOFGForm : Form
     {
-        public ChatOFG chatOFG = new ChatOFG(new Logger(new Logger.Properties(), new FileLogger()));
+        public ChatOFGClient chatOFGClient = new ChatOFGClient(new Logger(new Logger.Properties(), new FileLogger()));
         public Log log;
 
         public ChatOFGForm()
         {
             InitializeComponent();
 
-            chatOFG.ReceiveMessage += ReceiveMessage;
-            chatOFG.ConnectionLost += ConnectionLost;
-            log = new Log(chatOFG.logger);
+            chatOFGClient.ReceiveMessage += ReceiveMessage;
+            chatOFGClient.ConnectionLost += ConnectionLost;
+            log = new Log(chatOFGClient.logger);
         }
 
         private void sendButton_Click(object sender, EventArgs e)
@@ -44,6 +44,9 @@ namespace ClientChatOFG
                         case MessageType.Leave:
                             usersListBox.Items.Remove(message.text.Split(' ')[0]);
                             break;
+                        case MessageType.Error:
+                            ShowMessageBoxWithLog(message.text, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, LoggerLevel.Error);
+                            break;
                     }
                 });
                 return;
@@ -58,13 +61,16 @@ namespace ClientChatOFG
 
         private void Send()
         {
-            chatOFG.SendMessage("message:" + messageTextBox.Text);
-            messageTextBox.Text = "";
+            if (messageTextBox.Text != "")
+            {
+                chatOFGClient.SendMessage("message:" + messageTextBox.Text);
+                messageTextBox.Text = "";
+            }
         }
 
         public void Disconnect(string cause)
         {
-            chatOFG.Disconnect();
+            chatOFGClient.Disconnect();
             ShowMessageBoxWithLog(cause, "Соединение потеряно", MessageBoxButtons.OK, MessageBoxIcon.Warning, LoggerLevel.Warn);
             new Login(this).ShowDialog();
         }
@@ -78,7 +84,7 @@ namespace ClientChatOFG
 
         public DialogResult ShowMessageBoxWithLog(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, LoggerLevel logLevel)
         {
-            chatOFG.logger.Write(text, logLevel);
+            chatOFGClient.logger.Write(text, logLevel);
             return MessageBox.Show(text, caption, buttons, icon);
         }
 
@@ -104,8 +110,18 @@ namespace ClientChatOFG
 
         private void sendCustomToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            chatOFG.SendMessage(messageTextBox.Text);
+            chatOFGClient.SendMessage(messageTextBox.Text);
             messageTextBox.Text = "";
+        }
+
+        private void kickToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var textInputDialog = new TextInputDialog("причину исключения"))
+            {
+                textInputDialog.ShowDialog();
+                if (usersListBox.SelectedItem is not null && textInputDialog.textWriten)
+                    chatOFGClient.SendMessage(new Message($"{textInputDialog.textBox.Text}:{usersListBox.SelectedItem}", MessageType.Kick).ToFullText());
+            }
         }
     }
 }

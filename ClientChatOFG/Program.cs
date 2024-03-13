@@ -26,7 +26,7 @@ namespace ClientChatOFG
             }
             #endif
 
-            chatOFGForm.chatOFG.logger.fileLogger.SaveFile();
+            chatOFGForm.chatOFGClient.logger.fileLogger.SaveFile();
         }
     }
 }

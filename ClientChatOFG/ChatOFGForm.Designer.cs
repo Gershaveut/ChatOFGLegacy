@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             chatRichTextBox = new RichTextBox();
             messageTextBox = new TextBox();
             sendButton = new Button();
@@ -35,11 +36,14 @@
             menuToolStripMenuItem = new ToolStripMenuItem();
             logToolStripMenuItem = new ToolStripMenuItem();
             reconnectToolStripMenuItem = new ToolStripMenuItem();
-            usersListBox = new ListBox();
-            label1 = new Label();
             debugToolStripMenuItem = new ToolStripMenuItem();
             sendCustomToolStripMenuItem = new ToolStripMenuItem();
+            usersListBox = new ListBox();
+            userListContextMenuStrip = new ContextMenuStrip(components);
+            kickToolStripMenuItem = new ToolStripMenuItem();
+            label1 = new Label();
             menuStrip1.SuspendLayout();
+            userListContextMenuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // chatRichTextBox
@@ -102,24 +106,6 @@
             reconnectToolStripMenuItem.Text = "Переподключиться";
             reconnectToolStripMenuItem.Click += reconnectToolStripMenuItem_Click;
             // 
-            // usersListBox
-            // 
-            usersListBox.FormattingEnabled = true;
-            usersListBox.ItemHeight = 15;
-            usersListBox.Location = new Point(713, 45);
-            usersListBox.Name = "usersListBox";
-            usersListBox.Size = new Size(75, 379);
-            usersListBox.TabIndex = 4;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(713, 27);
-            label1.Name = "label1";
-            label1.Size = new Size(85, 15);
-            label1.TabIndex = 5;
-            label1.Text = "Пользователи";
-            // 
             // debugToolStripMenuItem
             // 
             debugToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { sendCustomToolStripMenuItem });
@@ -133,6 +119,38 @@
             sendCustomToolStripMenuItem.Size = new Size(227, 22);
             sendCustomToolStripMenuItem.Text = "Отправить свое сообщение";
             sendCustomToolStripMenuItem.Click += sendCustomToolStripMenuItem_Click;
+            // 
+            // usersListBox
+            // 
+            usersListBox.ContextMenuStrip = userListContextMenuStrip;
+            usersListBox.FormattingEnabled = true;
+            usersListBox.ItemHeight = 15;
+            usersListBox.Location = new Point(713, 45);
+            usersListBox.Name = "usersListBox";
+            usersListBox.Size = new Size(75, 379);
+            usersListBox.TabIndex = 4;
+            // 
+            // userListContextMenuStrip
+            // 
+            userListContextMenuStrip.Items.AddRange(new ToolStripItem[] { kickToolStripMenuItem });
+            userListContextMenuStrip.Name = "contextMenuStrip1";
+            userListContextMenuStrip.Size = new Size(181, 48);
+            // 
+            // kickToolStripMenuItem
+            // 
+            kickToolStripMenuItem.Name = "kickToolStripMenuItem";
+            kickToolStripMenuItem.Size = new Size(180, 22);
+            kickToolStripMenuItem.Text = "Исключить";
+            kickToolStripMenuItem.Click += kickToolStripMenuItem_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(713, 27);
+            label1.Name = "label1";
+            label1.Size = new Size(85, 15);
+            label1.TabIndex = 5;
+            label1.Text = "Пользователи";
             // 
             // ChatOFGForm
             // 
@@ -152,6 +170,7 @@
             Load += ChatOFGForm_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            userListContextMenuStrip.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -169,5 +188,7 @@
         private Label label1;
         private ToolStripMenuItem debugToolStripMenuItem;
         private ToolStripMenuItem sendCustomToolStripMenuItem;
+        private ContextMenuStrip userListContextMenuStrip;
+        private ToolStripMenuItem kickToolStripMenuItem;
     }
 }

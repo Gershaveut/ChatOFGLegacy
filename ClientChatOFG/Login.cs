@@ -20,7 +20,7 @@ namespace ClientChatOFG
 
             try
             {
-                await Task.Run(() => сhatOFGForm.chatOFG.Connect(new TcpClient(), new IPEndPoint(IPAddress.Parse(IPTextBox.Text), Convert.ToInt32(portTextBox.Text)), nameTextBox.Text));
+                await Task.Run(() => сhatOFGForm.chatOFGClient.Connect(new TcpClient(), new IPEndPoint(IPAddress.Parse(IPTextBox.Text), Convert.ToInt32(portTextBox.Text)), nameTextBox.Text));
                 сhatOFGForm.Text = $"{сhatOFGForm.Tag} - {nameTextBox.Text}";
                 сhatOFGForm.Connect();
                 Close();
@@ -36,7 +36,7 @@ namespace ClientChatOFG
 
         private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!(сhatOFGForm.chatOFG.client is not null && сhatOFGForm.chatOFG.client.Connected))
+            if (!(сhatOFGForm.chatOFGClient.client is not null && сhatOFGForm.chatOFGClient.client.Connected))
                 Application.Exit();
         }
     }

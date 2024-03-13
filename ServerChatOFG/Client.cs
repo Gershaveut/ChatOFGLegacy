@@ -36,7 +36,7 @@ namespace ServerChatOFG
                     {
                         string? text = await reader.ReadLineAsync();
 
-                        if (text == null)
+                        if (string.IsNullOrEmpty(text))
                             continue;
 
                         Message message = text;
@@ -46,9 +46,21 @@ namespace ServerChatOFG
                         else
                         {
                             if (server.admins.Contains(name))
-                                await server.BroadcastMessageAsync(message.text, message.messageType);
+                                if (message.messageType == MessageType.Kick)
+                                {
+                                    string kickedName = message.text.Split(":")[1];
+                                    string cause = message.text.Split(":")[0];
+
+                                    await server.SendMessageAsync(kickedName, cause, message.messageType);
+                                    server.logger.Write($"{name} исключил {kickedName} по причине {cause}", LoggerLevel.Info);
+                                }
+                                else
+                                {
+                                    await server.BroadcastMessageAsync(message.text, message.messageType);
+                                    server.logger.Write($"{name} отправил команду {message.ToFullText()}", LoggerLevel.Info);
+                                }
                             else
-                                await SendMessageAsync("У вас недостаточно прав для использования этого");
+                                await SendMessageAsync("У вас недостаточно прав для использования этого", MessageType.Error);
                         }
                     }
                     catch
