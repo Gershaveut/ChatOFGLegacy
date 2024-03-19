@@ -27,11 +27,11 @@ namespace ClientChatOFG
             }
             catch (Exception ex)
             {
-                loginButton.Enabled = true;
-
                 if (MessageBox.Show(ex.Message, "Ошибка подключения", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) == DialogResult.Retry)
                     loginButton_Click(sender, e);
             }
+
+            loginButton.Enabled = true;
         }
 
         private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)

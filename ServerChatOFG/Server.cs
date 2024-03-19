@@ -38,7 +38,7 @@ namespace ServerChatOFG
                     if (!clients.Any((c) => c.name == name))
                     {
                         foreach (Client join in clients)
-                            await client.SendMessageAsync(join.name, MessageType.Join);
+                            await client.SendMessageAsync(new Message(join.name, MessageType.Join));
 
                         clients.Add(client);
 
@@ -73,12 +73,12 @@ namespace ServerChatOFG
             }
         }
 
-        public async Task BroadcastMessageAsync(string message, MessageType messageType = MessageType.Message)
+        public async Task BroadcastMessageAsync(Message message)
         {
-            logger.Write(message, LoggerLevel.Info);
+            logger.Write(message.text, LoggerLevel.Info);
 
             foreach (var client in clients)
-                await client.SendMessageAsync(message, messageType);
+                await client.SendMessageAsync(message);
         }
 
         public bool TryRemoveConnection(string name)
@@ -100,12 +100,12 @@ namespace ServerChatOFG
             TryRemoveConnection(name);
         }
 
-        public async Task SendMessageAsync(string name, string message, MessageType messageType = MessageType.Message)
+        public async Task SendMessageAsync(string name, Message message)
         {
             Client? client = clients.FirstOrDefault(c => c.name == name);
             
             if (client != null)
-                await client.SendMessageAsync(message, messageType);
+                await client.SendMessageAsync(message);
         }
 
         public async Task KickClientAsync(string name, string cause)

@@ -7,8 +7,9 @@ namespace ClientChatOFG
 {
     public partial class ChatOFGForm : Form
     {
-        public ChatOFGClient chatOFGClient = new ChatOFGClient(new Logger(new Logger.Properties(), new FileLogger()));
+        public ChatOFGClient chatOFGClient = new(new Logger(new Logger.Properties(), new FileLogger()));
         public Log log;
+        public Login login;
 
         public ChatOFGForm()
         {
@@ -17,6 +18,7 @@ namespace ClientChatOFG
             chatOFGClient.ReceiveMessage += ReceiveMessage;
             chatOFGClient.ConnectionLost += ConnectionLost;
             log = new Log(chatOFGClient.logger);
+            login = new(this);
         }
 
         private void sendButton_Click(object sender, EventArgs e)
@@ -32,9 +34,6 @@ namespace ClientChatOFG
                 {
                     switch (message.messageType)
                     {
-                        case MessageType.Message:
-                            chatRichTextBox.AppendText(Environment.NewLine + message);
-                            break;
                         case MessageType.Kick:
                             Disconnect("Вы были исключены по причине: " + message);
                             break;
@@ -48,6 +47,8 @@ namespace ClientChatOFG
                             ShowMessageBoxWithLog(message.text, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error, LoggerLevel.Error);
                             break;
                     }
+
+                    chatRichTextBox.AppendText(Environment.NewLine + message.text);
                 });
                 return;
             }
@@ -63,7 +64,7 @@ namespace ClientChatOFG
         {
             if (messageTextBox.Text != "")
             {
-                chatOFGClient.SendMessage("message:" + messageTextBox.Text);
+                chatOFGClient.SendMessage(messageTextBox.Text);
                 messageTextBox.Text = "";
             }
         }
@@ -72,7 +73,7 @@ namespace ClientChatOFG
         {
             chatOFGClient.Disconnect();
             ShowMessageBoxWithLog(cause, "Соединение потеряно", MessageBoxButtons.OK, MessageBoxIcon.Warning, LoggerLevel.Warn);
-            new Login(this).ShowDialog();
+            login.ShowDialog();
         }
 
         public void Connect()
@@ -95,7 +96,7 @@ namespace ClientChatOFG
 
         private void ChatOFGForm_Load(object sender, EventArgs e)
         {
-            new Login(this).ShowDialog();
+            login.ShowDialog();
         }
 
         private void logToolStripMenuItem_Click(object sender, EventArgs e)
@@ -105,7 +106,7 @@ namespace ClientChatOFG
 
         private void reconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new Login(this).ShowDialog();
+            login.ShowDialog();
         }
 
         private void sendCustomToolStripMenuItem_Click(object sender, EventArgs e)
@@ -120,7 +121,7 @@ namespace ClientChatOFG
             {
                 textInputDialog.ShowDialog();
                 if (usersListBox.SelectedItem is not null && textInputDialog.textWriten)
-                    chatOFGClient.SendMessage(new Message($"{textInputDialog.textBox.Text}:{usersListBox.SelectedItem}", MessageType.Kick).ToFullText());
+                    chatOFGClient.SendMessage(new Message($"{textInputDialog.textBox.Text}:{usersListBox.SelectedItem}", MessageType.Kick).ToString());
             }
         }
     }

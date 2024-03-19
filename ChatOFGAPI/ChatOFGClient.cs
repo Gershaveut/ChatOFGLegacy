@@ -57,18 +57,30 @@ namespace ChatOFGAPI
 
         public void Disconnect()
         {
-            receiveMessageToken?.Cancel();
-            receiveMessageToken?.Dispose();
-            receiveMessageToken = null;
-            reader?.Close();
-            writer?.Close();
-            client?.Close();
+            if (GetConnected())
+            {
+                receiveMessageToken.Cancel();
+                receiveMessageToken.Dispose();
+                receiveMessageToken = null;
+
+                reader.Close();
+                writer.Close();
+                client.Close();
+            }
         }
 
-        public void SendMessage(string message)
+        public void SendMessage(Message message)
         {
-            writer?.WriteLine(message);
-            writer?.Flush();
+            if (GetConnected())
+            {
+                writer.WriteLine(message);
+                writer.Flush();
+            }
+        }
+
+        public bool GetConnected()
+        {
+            return client != null ? client.Connected : false;
         }
 
         protected async Task ReceiveMessageHandlerAsync()
@@ -89,7 +101,7 @@ namespace ChatOFGAPI
                         if (message == MessageType.Kick)
                             logger.Write("Вы были исключены по причине: " + message, LoggerLevel.Warn);
                         else
-                            logger.Write(message, LoggerLevel.Info);
+                            logger.Write(message.text, LoggerLevel.Info);
 
                         ReceiveMessage?.Invoke(message);
                     }

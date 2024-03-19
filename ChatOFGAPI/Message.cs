@@ -9,20 +9,16 @@ namespace ChatOFGAPI
 
         public Message(string text)
         {
-            this.text = text.Substring(text.IndexOf(':') + 1);
-
-            Enum.TryParse(text.Split(':')[0], out messageType);
+            if (Enum.TryParse(text.Split(':')[0], out messageType))
+                this.text = text.Substring(text.IndexOf(':') + 1);
+            else
+                this.text = text;
         }
 
         public Message(string text, MessageType messageType)
         {
             this.text = text;
             this.messageType = messageType;
-        }
-
-        public string ToFullText()
-        {
-            return messageType + ":" + text;
         }
 
         public static implicit operator Message(string text)
@@ -32,12 +28,17 @@ namespace ChatOFGAPI
 
         public static implicit operator string(Message message)
         {
-            return message.text;
+            return message.ToString();
         }
 
         public static implicit operator MessageType(Message message)
         {
             return message.messageType;
+        }
+
+        public override string ToString()
+        {
+            return messageType + ":" + text;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace ServerChatOFG
         {
             try
             {
-                await server.BroadcastMessageAsync($"{name} вошел в чат", MessageType.Join);
+                await server.BroadcastMessageAsync(new Message($"{name} вошел в чат", MessageType.Join));
 
                 while (true)
                 {
@@ -46,27 +46,28 @@ namespace ServerChatOFG
                         else
                         {
                             if (server.admins.Contains(name))
-                                if (message.messageType == MessageType.Kick)
+                                switch (message.messageType)
                                 {
-                                    string kickedName = message.text.Split(":")[1];
-                                    string cause = message.text.Split(":")[0];
+                                    default:
+                                        await server.BroadcastMessageAsync(message);
+                                        server.logger.Write($"{name} отправил команду {message}", LoggerLevel.Info);
+                                        break;
+                                    case MessageType.Kick:
+                                        string kickedName = message.text.Split(":")[1];
+                                        string cause = message.text.Split(":")[0];
 
-                                    await server.SendMessageAsync(kickedName, cause, message.messageType);
-                                    server.logger.Write($"{name} исключил {kickedName} по причине {cause}", LoggerLevel.Info);
-                                }
-                                else
-                                {
-                                    await server.BroadcastMessageAsync(message.text, message.messageType);
-                                    server.logger.Write($"{name} отправил команду {message.ToFullText()}", LoggerLevel.Info);
+                                        await server.SendMessageAsync(kickedName, new Message(cause, MessageType.Kick));
+                                        server.logger.Write($"{name} исключил {kickedName} по причине {cause}", LoggerLevel.Info);
+                                        break;
                                 }
                             else
-                                await SendMessageAsync("У вас недостаточно прав для использования этого", MessageType.Error);
+                                await SendMessageAsync(new Message("У вас недостаточно прав для использования этого", MessageType.Error));
                         }
                     }
                     catch
                     {
                         Close();
-                        await server.BroadcastMessageAsync($"{name} покинул чат", MessageType.Leave);
+                        await server.BroadcastMessageAsync(new Message($"{name} покинул чат", MessageType.Leave));
                         break;
                     }
                 }
@@ -78,21 +79,21 @@ namespace ServerChatOFG
             }
         }
 
-        public async Task SendMessageAsync(string message, LoggerLevel loggerLevel, MessageType messageType = MessageType.Message)
+        public async Task SendMessageAsync(Message message, LoggerLevel loggerLevel)
         {
             server.logger.Write(message, loggerLevel);
 
-            await SendMessageAsync(message, messageType);
+            await SendMessageAsync(message);
         }
-        public async Task SendMessageAsync(string message, MessageType messageType = MessageType.Message)
+        public async Task SendMessageAsync(Message message)
         {
-            await writer.WriteLineAsync($"{messageType}:{message}");
+            await writer.WriteLineAsync(message);
             await writer.FlushAsync();
         }
 
         public async Task KickClientAsync(string cause)
         {
-            await SendMessageAsync(cause, LoggerLevel.Info, MessageType.Kick);
+            await SendMessageAsync(new Message(cause, MessageType.Kick), LoggerLevel.Info);
             Close();
         }
 

@@ -10,6 +10,8 @@ namespace ServerChatOFG
 
         static async Task Main()
         {
+            Console.Title = "Server ChatOFG";
+
             Console.Write("IP: ");
             string ip = Console.ReadLine() ?? IPAddress.Any.ToString();
             ip = ip == "" ? IPAddress.Any.ToString() : ip;
