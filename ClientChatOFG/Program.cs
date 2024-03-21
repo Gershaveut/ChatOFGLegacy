@@ -17,7 +17,7 @@ namespace ClientChatOFG
             try
             {
             #endif
-                Application.Run(new ChatOFGForm());
+                Application.Run(chatOFGForm);
             #if !DEBUG
             }
             catch (Exception ex)

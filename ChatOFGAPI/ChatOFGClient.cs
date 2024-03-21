@@ -16,7 +16,6 @@ namespace ChatOFGAPI
 
         protected StreamReader reader;
         protected StreamWriter writer;
-        protected CancellationTokenSource receiveMessageToken;
 
         public StreamReader Reader { get; }
         public StreamWriter Writer { get; }
@@ -38,8 +37,6 @@ namespace ChatOFGAPI
 
             Disconnect();
 
-            receiveMessageToken = new CancellationTokenSource();
-
             client = tcpClient;
             client.Connect(remote);
 
@@ -49,8 +46,8 @@ namespace ChatOFGAPI
             if (reader is null || writer is null)
                 return;
 
-            _ = Task.Run(ReceiveMessageHandlerAsync, receiveMessageToken.Token);
-            
+            _ = Task.Run(ReceiveMessageHandlerAsync);
+
             await writer.WriteLineAsync(name);
             await writer.FlushAsync();
         }
@@ -59,10 +56,6 @@ namespace ChatOFGAPI
         {
             if (GetConnected())
             {
-                receiveMessageToken.Cancel();
-                receiveMessageToken.Dispose();
-                receiveMessageToken = null;
-
                 reader.Close();
                 writer.Close();
                 client.Close();
@@ -85,41 +78,32 @@ namespace ChatOFGAPI
 
         protected async Task ReceiveMessageHandlerAsync()
         {
-            while (true)
+            while (GetConnected())
             {
                 try
                 {
-                    if (reader != null)
-                    {
-                        string text = await reader.ReadLineAsync();
+                    string text = await reader.ReadLineAsync();
 
-                        if (string.IsNullOrEmpty(text))
-                            continue;
+                    if (string.IsNullOrEmpty(text))
+                        continue;
 
-                        Message message = text;
+                    Message message = text;
 
-                        if (message == MessageType.Kick)
-                            logger.Write("Вы были исключены по причине: " + message, LoggerLevel.Warn);
-                        else
-                            logger.Write(message.text, LoggerLevel.Info);
+                    if (message == MessageType.Kick)
+                        logger.Write("Вы были исключены по причине: " + message, LoggerLevel.Warn);
+                    else
+                        logger.Write(message.text, LoggerLevel.Info);
 
-                        ReceiveMessage?.Invoke(message);
-                    }
-                }
-                catch (IOException ex)
-                {
-                    if (!receiveMessageToken?.Token.IsCancellationRequested ?? true)
-                    {
-                        ConnectionLost?.Invoke();
-                        logger.Write(ex.Message, LoggerLevel.Warn);
-                    }
-                    break;
+                    ReceiveMessage?.Invoke(message);
                 }
                 catch (Exception ex)
                 {
                     logger.Write(ex.Message, LoggerLevel.Error);
                 }
             }
+
+            ConnectionLost?.Invoke();
+            logger.Write("Соединение потерянно", LoggerLevel.Warn);
         }
     }
 }

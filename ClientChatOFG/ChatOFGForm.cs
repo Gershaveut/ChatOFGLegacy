@@ -18,6 +18,7 @@ namespace ClientChatOFG
             chatOFGClient.ReceiveMessage += ReceiveMessage;
             chatOFGClient.ConnectionLost += ConnectionLost;
             log = new Log(chatOFGClient.logger);
+            log.Show();
             login = new(this);
         }
 
@@ -106,7 +107,8 @@ namespace ClientChatOFG
 
         private void reconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            login.ShowDialog();
+            chatOFGClient.Disconnect();
+            //login.ShowDialog();
         }
 
         private void sendCustomToolStripMenuItem_Click(object sender, EventArgs e)
